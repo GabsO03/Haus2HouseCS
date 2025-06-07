@@ -5,6 +5,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { GeocodeService } from '../../../services/geocode.service';
 import { AlertService } from '../../services/alert.service';
 
+declare let L: any;
 @Component({
   selector: 'shared-choose-location',
   standalone: false,
@@ -24,9 +25,9 @@ export class ChooseLocationComponent implements OnInit, OnDestroy {
   private map: any | null = null;
   private marker: any | null = null;
   private searchSubject = new Subject<string>();
-  private L: any;
-  private defaultLocation = { lat: -12.0464, lng: -77.0428 };
   private searchSubscription: Subscription | null = null;
+
+  private defaultLocation = { lat: -12.0464, lng: -77.0428 };
 
   constructor(
     private fb: FormBuilder,
@@ -42,7 +43,8 @@ export class ChooseLocationComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     if (this.isBrowser) {
-      this.L = await import('leaflet');
+      const leaflet = await import('leaflet');
+      (window as any).L = leaflet;
       this.locationForm.patchValue({ address: this.initialAddress });
       this.searchSubscription = this.searchSubject
         .pipe(debounceTime(500), distinctUntilChanged())
@@ -62,6 +64,7 @@ export class ChooseLocationComponent implements OnInit, OnDestroy {
       this.map.remove();
       this.map = null;
       this.marker = null;
+      delete (window as any).L;
     }
     if (this.searchSubscription) {
       this.searchSubscription.unsubscribe();
@@ -70,18 +73,18 @@ export class ChooseLocationComponent implements OnInit, OnDestroy {
   }
 
   initMap(): void {
-    if (!this.isBrowser || !this.L || !this.mapContainerRef) return;
+    if (!this.isBrowser || !window.L || !this.mapContainerRef) return;
 
-    this.map = this.L.map(this.mapContainerRef.nativeElement).setView(
+    this.map = window.L.map(this.mapContainerRef.nativeElement).setView(
       [this.defaultLocation.lat, this.defaultLocation.lng],
       12
     );
 
-    this.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(this.map);
 
-    this.marker = this.L.marker(
+    this.marker = window.L.marker(
       [this.defaultLocation.lat, this.defaultLocation.lng],
       { draggable: true }
     ).addTo(this.map);

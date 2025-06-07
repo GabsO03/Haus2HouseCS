@@ -3,7 +3,10 @@ import { User } from '../interfaces/user.interface';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import * as CryptoJS from 'crypto-js';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
+import { isPlatformBrowser } from '@angular/common';
+import { PLATFORM_ID } from '@angular/core';
+import { Inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +17,13 @@ export class AuthService {
   private secretKey = environment.cryptoServiceKey!;
   private user?: User;
 
-  constructor(private httpClient: HttpClient) {
-    this.checkAuthenticacion().subscribe();
+  constructor(
+    private httpClient: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.checkAuthenticacion().subscribe();
+    }
   }
 
   signIn( user: User ): Observable<User> {
@@ -25,7 +33,10 @@ export class AuthService {
     );
   }
   changePassword(passwordData: any): Observable<any> {
-    const userId = localStorage.getItem('token');    
+    const userId = isPlatformBrowser(this.platformId) ? localStorage.getItem('token') : null;
+    if (!userId) {
+      return throwError(() => new Error('No user ID available'));
+    }
     return this.httpClient.post(`${this.baseUrl}/users/${userId}/change-password-authorization`, passwordData);
   }
 
@@ -35,18 +46,20 @@ export class AuthService {
   }
 
   checkAuthenticacion(): Observable<boolean>{
+    if (!isPlatformBrowser(this.platformId)) {
+      return of(false); // Retorna false en el servidor
+    }
+
     if (!localStorage.getItem('token')) return of(false);
-   
+
     const token = localStorage.getItem('token');
-    
-    const url = `${ this.baseUrl }/users/${token}`;
-    
-    return this.httpClient.get<any>(url)
-    .pipe (
-      tap ( user => this.user = user.data),
-      map ( user => !!user.data),
-      catchError ( err => of(false))
-    )
+    const url = `${this.baseUrl}/users/${token}`;
+
+    return this.httpClient.get<any>(url).pipe(
+      tap(user => this.user = user.data),
+      map(user => !!user.data),
+      catchError(err => of(false))
+    );
   }
 
   login (email: string, password: string):Observable<User | false> {
@@ -58,8 +71,10 @@ export class AuthService {
         if (respuesta) {
           const user = respuesta.data.user;
           this.user = user;
-          localStorage.setItem('token', user.id.toString())
-          localStorage.setItem('r', this.encrypt(user.rol))
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('token', user.id.toString());
+            localStorage.setItem('r', this.encrypt(user.rol));
+          }
           return user;
         }
       })
@@ -68,17 +83,24 @@ export class AuthService {
 
   logout () {
     this.user = undefined;
-    localStorage.clear();
-    
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.clear();
+    }
   }
 
 
   encrypt(text: string): string {
-    return CryptoJS.AES.encrypt(text, this.secretKey).toString();
+    if (isPlatformBrowser(this.platformId)) {
+      return CryptoJS.AES.encrypt(text, this.secretKey).toString();
+    }
+    return '';
   }
 
   decrypt(encryptedText: string): string {
-    const bytes = CryptoJS.AES.decrypt(encryptedText, this.secretKey);
-    return bytes.toString(CryptoJS.enc.Utf8);
+    if (isPlatformBrowser(this.platformId)) {
+      const bytes = CryptoJS.AES.decrypt(encryptedText, this.secretKey);
+      return bytes.toString(CryptoJS.enc.Utf8);
+    }
+    return '';
   }
 }

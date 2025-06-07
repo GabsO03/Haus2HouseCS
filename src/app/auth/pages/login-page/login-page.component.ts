@@ -33,6 +33,7 @@ export class LoginPageComponent {
 
 
     this.loading = true;
+    console.log({ email: this.userForm.get('email')?.value, pass: this.userForm.get('password')?.value});
     this.authService.login(this.userForm.get('email')?.value, this.userForm.get('password')?.value)
     .subscribe( user => {
       if (!user) {
