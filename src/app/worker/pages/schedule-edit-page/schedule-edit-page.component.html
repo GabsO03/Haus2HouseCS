@@ -1,0 +1,45 @@
+<ng-template #cargando>
+    <shared-loading></shared-loading>
+</ng-template>
+  
+<div *ngIf="!isLoading; else cargando" class="py-4 px-6 mb-5 text-base rounded-md border border-gray-500">
+  <h2 class="mb-3 block font-medium text-[#07074D]">
+    Horario Semanal <i class="ml-3 fa-solid fa-calendar"></i>
+  </h2>
+  <div>
+    <form [formGroup]="scheduleForm" (ngSubmit)="onSubmit()">
+      <div formArrayName="weeklyAvailability" class="grid grid-cols-3 gap-4">
+        <div *ngFor="let day of daysOfWeek; let i = index" class="flex flex-col justify-center items-center text-center">
+          <span class="text-sm font-medium text-[#07074D] mb-2">{{ day.name }}</span>
+          <div class="flex flex-col items-center w-full">
+              <label class="text-xs font-medium text-[#6B7280] mb-1">Mañanas</label>
+              <div class="flex items-center gap-2">
+                  <input type="time" [formControl]="getFormControl(i, 'morningStart')"
+                      class="w-30 rounded-md border border-[#e0e0e0] py-1 px-2 text-sm outline-none focus:border-[#6A64F1]" />
+                  <span>-</span>
+                  <input type="time" [formControl]="getFormControl(i, 'morningEnd')"
+                      class="w-30 rounded-md border border-[#e0e0e0] py-1 px-2 text-sm outline-none focus:border-[#6A64F1]" />
+              </div>
+          </div>
+          <div class="flex flex-col items-center w-full mt-2">
+              <label class="text-xs font-medium text-[#6B7280] mb-1">Tardes</label>
+              <div class="flex items-center gap-2">
+                  <input type="time" [formControl]="getFormControl(i, 'afternoonStart')"
+                      class="w-30 rounded-md border border-[#e0e0e0] py-1 px-2 text-sm outline-none focus:border-[#6A64F1]" />
+                  <span>-</span>
+                  <input type="time" [formControl]="getFormControl(i, 'afternoonEnd')"
+                      class="w-30 rounded-md border border-[#e0e0e0] py-1 px-2 text-sm outline-none focus:border-[#6A64F1]" />
+              </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="mt-4 flex justify-end">
+    <button (click)="onSubmit()"
+      class="button my-bg-light-teal text-white px-4 py-2 rounded-md disabled:bg-gray-400"
+      [disabled]="scheduleForm.invalid || isLoading">
+      Guardar Horario
+    </button>
+  </div>
+</div>

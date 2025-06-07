@@ -1,0 +1,71 @@
+<ng-template #cargando>
+    <shared-loading></shared-loading>
+</ng-template>
+
+<div *ngIf="!isLoading; else cargando" class="bg-gray-100">
+    <div class="container mx-auto py-8">
+        <!-- Calendar for Current Month -->
+        <div class="wrapper bg-white rounded shadow w-full mb-8">
+            <!-- Cabecera calendario -->
+            <div class="header flex justify-between border-b p-2">
+                <span class="text-lg font-bold">
+                {{ currentMonth?.year }} {{ currentMonth?.month }}
+                </span>
+                <!-- Botones avanzar/retroceder mes -->
+                <div class="buttons">
+                    <button class="p-1" (click)="changeMonth(-1)" [disabled]="!canGoBack">
+                        <svg width="1em" fill="gray" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path fill-rule="evenodd" d="M8.354 11.354a.5.5 0 0 0 0-.708L5.707 8l2.647-2.646a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708 0z"/>
+                        <path fill-rule="evenodd" d="M11.5 8a.5.5 0 0 0-.5-.5H6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 .5-.5z"/>
+                        </svg>
+                    </button>
+                    <button class="p-1" (click)="changeMonth(1)" [disabled]="!canGoForward">
+                        <svg width="1em" fill="gray" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path fill-rule="evenodd" d="M7.646 11.354a.5.5 0 0 1 0-.708L10.293 8 7.646 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 1 1-.708 0z"/>
+                        <path fill-rule="evenodd" d="M4.5 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <table class="w-full table-fixed">
+                <!-- Días de la semana -->
+                <thead>
+                    <tr>
+                    <th *ngFor="let day of weekDays"
+                        class="p-2 border-r h-10 xl:w-40 lg:w-32 md:w-28 sm:w-20 w-10 xl:text-sm text-xs">
+                        <span class="lg:block md:block sm:block hidden">{{ day.completo }}</span>
+                        <span class="lg:hidden md:hidden sm:hidden block">{{ day.short }}</span>
+                    </th>
+                    </tr>
+                </thead>
+
+                <!-- Días del mes -->
+                <tbody>
+                    <tr *ngFor="let week of currentMonth?.weeks" class="text-center h-20">
+                        <td *ngFor="let day of week"
+                            class="border p-1 h-40 xl:w-40 lg:w-32 md:w-28 sm:w-20 w-10 overflow-auto transition cursor-pointer duration-500 ease hover:bg-gray-300"
+                            [ngClass]="{'bg-gray-100': !day.isCurrentMonth}">
+                            <div class="flex flex-col mx-auto h-40 w-full overflow-hidden">
+                                <div class="top h-5 w-full">
+                                    <span class="text-gray-500" *ngIf="day.day">{{ day.day }}</span>
+                                </div>
+                                <div class="bottom flex-grow h-30 py-1 w-full cursor-pointer">
+                                    <div *ngFor="let service of day.services" class="event bg-blue-400 text-white rounded p-1 text-sm mb-1">
+                                    <button type="button" (click)="goToServiceDetail(service.id)">
+                                        <span class="event-name">{{ getServiceTypeName(service.service_type_id) }}</span>
+                                        <span class="time">{{ service.start_time | dateFormat: 'toTime' }}-{{ service.end_time | dateFormat: 'toTime' }}</span>
+                                    </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<services-list-page></services-list-page>

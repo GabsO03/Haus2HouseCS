@@ -1,0 +1,146 @@
+<div class="flex items-center justify-center p-12">
+    <div class="mx-auto w-full max-w-[550px] bg-white card">
+        <form [formGroup]="serviceForm" (ngSubmit)="onSubmit()">
+            <div class="mb-5">
+                <label class="mb-3 block text-base font-medium text-[#07074D]">
+                Tipo de Servicio
+                </label>
+                <div class="relative">
+                    <div *ngIf="showServiceInput" class="absolute top-full left-0 w-full bg-white border border-[#e0e0e0] rounded-md z-10">
+                        <input type="text" id="serviceInput" [formControl]="newService" placeholder="Busca un servicio"
+                        class="w-full py-3 px-4 rounded text-base font-medium text-[#6B7280] outline-none" (blur)="onAddService()" />
+                        <div *ngIf="existingServices.length > 0 && serviceSearchActive" class="max-h-40 overflow-y-auto">
+                            <div *ngFor="let service of existingServices" (click)="onAddService(service)"
+                                class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                {{ service.name }}
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" (click)="toggleServiceInput()"
+                        class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] text-left outline-none focus:border-[#6A64F1] focus:shadow-md">
+                        {{ serviceForm.value.service_type_id ? getServiceName(serviceForm.value.service_type_id) : 'Selecciona un servicio' }}
+                    </button>
+                </div>
+                <span *ngIf="isValidField('service_type_id')" class="text-red-600 text-sm">Debes seleccionar un tipo de servicio</span>
+            </div>
+
+            <div class="mb-5">
+                <label for="description" class="mb-3 block text-base font-medium text-[#07074D]">
+                Descripción
+                </label>
+                <textarea id="description" formControlName="description" placeholder="Describe el servicio que necesitas (ej. Limpieza general)"
+                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"></textarea>
+                <span *ngIf="isValidField('description')" class="text-red-600 text-sm">{{ getFieldError('description') }}</span>
+            </div>
+
+            <div class="mb-5">
+                <label for="specifications" class="mb-3 block text-base font-medium text-[#07074D]">
+                Especificaciones
+                </label>
+                <textarea id="specifications" formControlName="specifications" placeholder="Indica cualquier detalle adicional (ej. Sin alergias)"
+                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"></textarea>
+                <span *ngIf="isValidField('specifications')" class="text-red-600 text-sm">{{ getFieldError('specifications') }}</span>
+            </div>
+
+            <div class="mb-5 flex flex-row space-x-4">
+                <!-- Campo de Fecha -->
+                <div class="flex-1">
+                    <label for="date" class="mb-3 block text-base font-medium text-[#07074D]">
+                    Fecha
+                    </label>
+                    <input
+                    type="date"
+                    id="date"
+                    [min]="today | date:'yyyy-MM-dd'"
+                    [max]="oneMonthFromToday | date:'yyyy-MM-dd'"
+                    formControlName="date"
+                    class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                    />
+                    <span *ngIf="isValidField('date')" class="text-red-600 text-sm">{{
+                    getFieldError('date')
+                    }}</span>
+                    <span *ngIf="serviceForm.errors?.['dateBeforeToday'] && serviceForm.touched" class="text-red-600 text-sm">
+                        La fecha no puede ser anterior a hoy
+                    </span>
+                </div>
+
+                <!-- Campo de Hora de Inicio -->
+                <div class="flex-1">
+                    <label
+                    for="start_time"
+                    class="mb-3 block text-base font-medium text-[#07074D]"
+                    >
+                    Hora de Inicio
+                    </label>
+                    <input
+                    type="time"
+                    id="start_time"
+                    formControlName="start_time"
+                    class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                    />
+                    <span *ngIf="isValidField('start_time')" class="text-red-600 text-sm">{{
+                    getFieldError('start_time')
+                    }}</span>
+                </div>
+
+                <!-- Campo de Hora de Fin -->
+                <div class="flex-1">
+                    <label for="end_time" class="mb-3 block text-base font-medium text-[#07074D]">
+                    Hora de Fin
+                    </label>
+                    <input
+                    type="time"
+                    id="end_time"
+                    formControlName="end_time"
+                    class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                    />
+                    <span *ngIf="isValidField('end_time')" class="text-red-600 text-sm">{{
+                    getFieldError('end_time')
+                    }}</span>
+                </div>
+            </div>
+            <!-- Añade este span para el error del formulario -->
+            <span *ngIf="serviceForm.errors?.['endTimeBeforeStart'] && serviceForm.touched" class="text-red-600 text-sm">
+            La hora de fin debe ser posterior a la hora de inicio
+            </span>
+
+            <div class="mb-5">
+                <label for="client_location" class="mb-3 block text-base font-medium text-[#07074D]">
+                Ubicación
+                </label>
+                <input type="text" id="client_location" formControlName="client_location" placeholder="Ingresa la dirección del servicio"
+                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                <span *ngIf="isValidField('client_location')" class="text-red-600 text-sm">{{ getFieldError('client_location') }}</span>
+            </div>
+
+            <div class="mb-5">
+                <p class="text-base font-medium text-[#07074D]">
+                Costo Total Estimado: €{{ totalAmount | number:'1.2-2' }}
+                </p>
+            </div>
+
+            <div class="mb-5">
+                <label class="mb-3 block text-base font-medium text-[#07074D]">
+                    Método de Pago
+                </label>
+                <select formControlName="payment_method"
+                    class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+                    <option value="cash" >Efectivo</option>
+                    <option *ngIf="cardAvailable" value="card">Tarjeta</option>
+                </select>
+                <span *ngIf="isValidField('payment_method')" class="text-red-600 text-sm">Debes seleccionar un método de pago</span>
+            </div>
+
+            <div>
+                <button *ngIf="!isLoading; else cargando" type="submit"
+                class="button my-bg-light-teal hover:shadow-form w-full rounded-md py-3 px-8 text-center text-base font-semibold text-white outline-none">
+                Solicitar Servicio
+                </button>
+            </div>
+
+            <ng-template #cargando>
+                <shared-loading></shared-loading>
+            </ng-template>
+        </form>
+    </div>
+</div>

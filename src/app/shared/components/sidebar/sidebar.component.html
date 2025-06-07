@@ -1,0 +1,12 @@
+<aside id="logo-sidebar" class="shared-sidebar fixed top-12 left-0 z-40 h-screen pt-20 transition-transform -translate-x-full border-r" aria-label="Sidebar">
+  <div class="h-full px-3 pb-4 overflow-y-auto">
+     <ul class="space-y-2 font-medium">      
+        <li *ngFor="let item of sidebarItems">
+          <a href="{{ item.url }}" class="flex items-center p-2 rounded-lg hover:underline group">
+            <i class="fa-solid {{ item.icon }}"></i>
+            <span class="mx-3">{{ item.label }}</span>
+          </a>
+        </li>
+     </ul>
+  </div>
+</aside>

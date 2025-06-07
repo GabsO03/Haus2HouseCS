@@ -1,0 +1,101 @@
+<ng-template #cargando>
+  <shared-loading></shared-loading>
+</ng-template>
+
+<div *ngIf="!loading; else cargando" class="p-12 bg-white">
+  <div class="relative overflow-x-auto shadow-md rounded-md border border-[#e0e0e0]">
+    <div class="flex items-center justify-between flex-wrap p-4 bg-white">
+      <div class="relative">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <svg class="w-4 h-4 text-[#6B7280]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+          </svg>
+        </div>
+        <!-- <input type="text" id="table-search-users" [formControl]="searchControl"
+          class="block p-2 pl-10 text-sm text-[#07074D] border border-[#e0e0e0] rounded-md w-80 bg-white focus:ring-[#6A64F1] focus:border-[#6A64F1]"
+          placeholder="Buscar trabajadores"> -->
+        <div class="flex items-center space-x-4">
+          <input type="text" id="table-search-users" [formControl]="searchControl"
+              class="block p-2 pl-10 text-sm text-[#07074D] border border-[#e0e0e0] rounded-md w-80 bg-white focus:ring-[#6A64F1] focus:border-[#6A64F1]"
+              placeholder="Buscar trabajadores">
+
+          <div class="relative w-48">
+              <input type="text" id="service-search" [formControl]="serviceSearchControl"
+                  class="block p-2 text-sm text-[#07074D] border border-[#e0e0e0] rounded-md w-full bg-white focus:ring-[#6A64F1] focus:border-[#6A64F1]"
+                  placeholder="Buscar servicio"
+                  (focus)="onServiceInputFocus()" (blur)="onServiceInputBlur()">
+              <div *ngIf="showServiceDropdown && filteredServices.length > 0" 
+                  class="absolute top-full left-0 w-full bg-white border border-[#e0e0e0] rounded-md z-10 max-h-40 overflow-y-auto">
+                  <select size="5" class="w-full p-2 text-sm text-[#07074D] bg-white"
+                      (change)="onServiceSelect($event)">
+                      <option *ngFor="let service of filteredServices" [value]="service.id">
+                          {{ service.name }}
+                      </option>
+                  </select>
+              </div>
+          </div>
+
+          <button
+              (click)="resetFilters()"
+              class="ml-4 bg-gray-200 hover:bg-gray-300 text-[#07074D] text-sm font-medium py-2 px-4 rounded-md"
+          >
+              Restablecer
+          </button>
+        </div>
+      </div>
+    </div>
+    <table class="w-full text-sm text-left text-[#6B7280]">
+      <thead class="text-xs text-[#07074D] uppercase bg-gray-50">
+        <tr>
+          <th scope="col" class="px-6 py-3">Nombre</th>
+          <th scope="col" class="px-6 py-3">Rating</th>
+          <th scope="col" class="px-6 py-3">Habilidades</th>
+          <th scope="col" class="px-6 py-3">Estado</th>
+          <th scope="col" class="px-6 py-3">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="workers.length == 0">
+          <th rowspan="5" class="p-8" >
+            Aún no tienes trabajadores
+          </th>
+        </tr>
+        <tr *ngFor="let worker of filteredWorkers; let i = index"
+          class="bg-white border-b border-[#e0e0e0] hover:bg-gray-50">
+          <th scope="row" class="flex items-center px-6 py-4 text-[#07074D] whitespace-nowrap">
+            <img class="w-10 h-10 rounded-full" [src]="worker.user.profile_photo | user_pfp" [alt]="worker.user.nombre">
+            <div class="pl-3">
+              <div class="text-base font-semibold">{{ worker.user.nombre }}</div>
+              <div class="font-normal text-[#6B7280]">{{ worker.user.email }}</div>
+            </div>
+          </th>
+          <td class="px-6 py-4">
+            <div class="flex flex-col justify-center items-center mt-2">
+              <svg class="w-4 h-4 my-yellow " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+              </svg>
+              <p class="text-sm font-bold text-gray-900">{{ worker.rating }}</p>
+              <span class="text-sm text-center font-medium text-gray-900">{{ worker.cantidad_ratings }} <i class="fa-solid fa-user my-teal"></i></span>
+            </div>
+          </td>
+          <td class="px-6 py-4">
+            {{ getServiceNames(worker.services_id) }}
+          </td>
+          <td class="px-6 py-4">
+            <div class="flex items-center">
+              <div class="h-2.5 w-2.5 rounded-full mr-2"
+                [ngClass]="worker.active ? 'bg-green-500' : 'bg-red-500'"></div>
+              {{ worker.active ? 'Activo' : 'Inactivo' }}
+            </div>
+          </td>
+          <td class="px-6 py-4">
+            <div class="flex justify-between">
+            <a href="helper/{{ worker.user_id }}" class="font-medium text-[#6A64F1] hover:underline" ><i class="fa-solid fa-eye"></i></a>
+            <button (click)="toggleWorkerActivo(worker.user_id, worker.active == 1)" class="hover:cursor-pointer font-medium text-[#6A64F1] hover:underline" ><i class="fa-solid fa-exclamation" style="color: #ff0000;"></i></button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

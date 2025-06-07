@@ -1,0 +1,90 @@
+<ng-template #cargando>
+    <shared-loading></shared-loading>
+</ng-template>
+  
+<div *ngIf="worker; else cargando" class="bg-gray-100">
+    <div class="container mx-auto py-8">
+        <h2 class="ml-4 mb-3 block font-bold text-2xl text-[#07074D]">
+            {{ selfProfile ? 'Mi perfil' : 'Perfil de ' + worker.user.nombre }}
+        </h2>
+        <div class="grid grid-cols-3 gap-6 px-4">
+            <!-- Left side -->
+            <div class="col-span-1">
+                <div class="bg-white shadow rounded-lg p-6">
+                    <div class="flex flex-col items-center">
+                        <!-- Nombre foto -->
+                        <div class="rounded-full shadow-xl mx-auto -mt-16 h-48 w-48 overflow-hidden" >
+                            <img [src]="worker.user.profile_photo | user_pfp" alt="Foto de perfil" class="object-cover" />
+                        </div>
+                        <h1 class="text-xl font-bold text-teal-700">{{ worker!.user!.nombre }}</h1>
+                        <p class="text-sm font-light text-teal-700">{{ worker!.user!.email }}</p>
+
+                        <!-- Rating -->
+                        <div class="flex flex-wrap justify-center items-center mt-2">
+                            <svg class="w-4 h-4 my-yellow " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                            </svg>
+                            <p class=" text-sm font-bold text-gray-900">{{ worker.rating }}</p>
+                            <span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full"></span>
+                            <span class="text-sm font-medium text-gray-900 underline hover:no-underline">{{ worker.cantidad_ratings }} reviews</span>
+                        </div>
+
+                        <!-- Para el cliente -->
+                        <div *ngIf="!selfProfile" class="mt-6 flex flex-wrap gap-4 justify-center">
+                            <a [routerLink]="['/helper/schedule/' + worker.user_id]" class="button my-bg-teal text-white">Ver horario</a>
+                        </div>
+
+                        <!-- Para el trabajador -->
+                        <div *ngIf="selfProfile" class="mt-4 flex flex-wrap gap-4 justify-center">
+                            <button class="button my-bg-teal text-white" [routerLink]="['/helper/profile/edit']">Editar Perfil</button>
+                        </div>
+                    </div>
+                    <hr class="my-6 border-t border-gray-300">
+                    <div class="flex flex-col">
+                        <span class="text-gray-700 uppercase font-bold tracking-wider mb-2">Habilidades</span>
+                        <ul>
+                            <li *ngFor="let service of getServiceNames(worker.services_id)" class="mb-2">{{ service }}</li>
+                            <li *ngIf="getServiceNames(worker.services_id).length === 0" class="mb-2 text-gray-500">Sin habilidades registradas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right side -->
+            <div class="col-span-2">
+                <div class="bg-white shadow rounded-lg p-6">
+                    <h2 class="text-xl font-bold mb-4 font-quicksand text-teal-700">Sobre Mí</h2>
+                    <p class="text-gray-700">
+                        {{ worker.bio }}
+                    </p>
+
+                    <!-- Comentarios -->
+                    <h2 class="text-xl font-bold mt-6 mb-4 font-quicksand text-teal-700">Comentarios de clientes</h2>
+                    <div class="space-y-4">
+                    <!-- Comment 1 -->
+                        <div *ngFor="let comment of comments" class="bg-white p-4 rounded-lg shadow">
+                            <div class="flex items-center mb-2">
+                                <div class="rounded-full shadow-xl mr-3 h-12 w-12 overflow-hidden" >
+                                    <img [src]="comment.client_pfp | user_pfp" alt="Foto de perfil" class="object-cover" />
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold hover:underline"><a [routerLink]="['/customer/' + comment.client_id]">{{ comment.client_name }}</a></h3>
+                                    <p class="text-sm text-gray-500">Publicado el {{ comment.created_at | dateFormat:'toDate' }}</p>
+                                    <div class="flex items-center mb-1 space-x-1 rtl:space-x-reverse">
+                                        <svg *ngFor="let star of [1, 2, 3, 4, 5]" class="w-4 h-4" [ngClass]="star <= comment.client_rating ? 'text-yellow-300' : 'text-gray-300'" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                        </svg>                        
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-gray-700">{{ comment.client_comments }}</p>
+                        </div>
+                        <div *ngIf="comments.length === 0" class="text-gray-500 text-center">
+                            No hay comentarios de clientes disponibles.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+<ng-template #cargando>
+  <shared-loading></shared-loading>
+</ng-template>
+
+<div *ngIf="!isLoading; else cargando" class="bg-gray-100 min-h-screen py-8">
+  <div class="container mx-auto px-4">
+    <h1 class="text-2xl font-quicksand text-teal-700 mb-3">
+      {{ title }}
+    </h1>
+    <div class="bg-white rounded-lg shadow p-6">
+      <div *ngIf="services.length === 0" class="text-center text-gray-500">
+        No hay servicios para mostrar.
+      </div>
+      <div *ngFor="let service of services" class="border-b last:border-b-0 py-4">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="text-lg font-semibold text-gray-800">
+              {{ service.service_type!.name || 'Desconocido' }}
+            </h2>
+            <p class="text-sm text-gray-500">
+              Fecha: {{ service.start_time | dateFormatService:'toDate' }}
+            </p>
+          </div>
+          <a [routerLink]="['/services', service.id]" class="button my-bg-teal text-white">
+            Ver Detalles
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

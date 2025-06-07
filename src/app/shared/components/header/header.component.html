@@ -1,0 +1,47 @@
+<header class="shared-header">
+  <div class="flex items-center">
+    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="flex content-center items-center p-2 mr-2 text-sm
+    focus:ring-4 focus:ring-teal-500 rounded-full focus:outline-none border-yellow-500">
+      <span class="sr-only">Open sidebar</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 0 16 16" fill="#fff" class="bi bi-three-dots-vertical w-8 h-8">
+        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+      </svg>
+    </button>
+    <h1 class="logo text-4xl">Haus2House</h1>
+  </div>
+
+
+  <button id="dropdownInformationButton" data-dropdown-toggle="dropdownInformation" class="text-white focus:ring-4 focus:outline-none focus:ring-teal-500 font-bold rounded-full text-sm p-2 m-1 text-center flex items-center" type="button">
+    <div class="rounded-full shadow-xl h-12 w-12 overflow-hidden" >
+      <img [src]="user?.profile_photo | user_pfp" alt="Foto de perfil" class="object-center" />
+    </div>
+  </button>
+    
+  <!-- Dropdown menu -->
+  <div id="dropdownInformation" class="flex flex-col items-center justify-center z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-46 dark:bg-gray-700 dark:divide-gray-600">
+    <div class="p-4 text-sm text-gray-900 dark:text-white">
+      <div>{{ user?.nombre }}</div>
+      <div class="font-medium truncate">{{ user?.email }}</div>
+    </div>
+    <ul *ngIf="!isAdmin" class="w-full py-2 text-center text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInformationButton">
+      <li>
+        <a href="{{ profileUrl }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Perfil</a>
+      </li>
+      <li *ngIf="isWorker">
+        <a href="helper/schedule" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mi horario</a>
+      </li>
+      <li *ngIf="isWorker">
+        <a href="helper/calendar" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Calendario</a>
+      </li>
+      <li *ngIf="!isWorker && !isAdmin">
+        <a href="customer/payment-method" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mi tarjeta</a>
+      </li>
+    </ul>
+    <button *ngIf="isAdmin" type="button" (click)="openChangePasswordModal()" class="my-bg-teal text-white rounded-md py-3 px-2 mx-auto font-light text-sm outline-none">Cambiar Contraseña</button>
+    <div class="py-2 w-full text-center">
+      <button type="button" (click)="onLogout()" class="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</button>
+    </div>
+  </div>
+
+</header>
+<change-password-modal *ngIf="user?.id" [userId]="user!.id"></change-password-modal>

@@ -1,0 +1,34 @@
+<ng-template #cargando>
+  <shared-loading></shared-loading>
+</ng-template>
+
+<div *ngIf="!loading; else cargando" class="flex flex-wrap lg:flex-nowrap items-center justify-center p-12">
+    <div class="mx-auto w-full max-w-[550px] bg-white card">
+        <h2 class="text-xl font-bold mb-4 font-quicksand text-teal-700">Método de Pago</h2>
+        <div *ngIf="paymentMethods.length > 0; else noPaymentMethod">
+            <div *ngFor="let method of paymentMethods" class="flex items-center justify-between mb-2">
+                <div class="flex items-center">
+                    <svg class="h-6 w-6 text-gray-600 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 6h18M3 14h18M3 18h18" />
+                    </svg>
+                    <p class="text-gray-700">Tarjeta terminada en {{ method.card.last4 }} ({{ method.card.brand }})</p>
+                </div>
+                <button (click)="deletePaymentMethod()"
+                title="Eliminar tarjeta"
+                class="text-red-600 hover:text-red-800">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+        </div>
+        <ng-template #noPaymentMethod>
+            <p class="text-gray-700">No tienes método de pago configurado.</p>
+        </ng-template>
+        <div class="mt-4" *ngIf="!add_payment_method && !hasPaymentMethod">
+            <button class="button my-bg-teal text-white hover:bg-teal-800" (click)="change_payment_method()">
+                Añadir Método de Pago
+            </button>
+        </div>
+    </div>
+</div>
+
+<client-add-payment-method *ngIf="add_payment_method"></client-add-payment-method>

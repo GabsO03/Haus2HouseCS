@@ -1,1 +1,171 @@
 /* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300&display=swap');
+
+
+/* Main title */
+.logo {
+  margin: 0;
+  /* font-size: 2.5rem; */
+  /* color: white; */
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: bolder;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  /* background: linear-gradient(to right, #66005f, #16005f); */
+  /* -webkit-background-clip: text; */
+  text-align: center;
+  color: #FFFFFF;
+  text-shadow: 
+    2px 0px 4px #66005f,
+    2px 2px 4px #16005f;
+}
+
+
+/* Fuentes gloables */
+body {
+  font-family: 'Nunito', sans-serif;
+}
+
+h1, h2, h3 {
+  font-family: 'Quicksand', sans-serif;
+}
+
+button, .button {
+  font-family: 'Fredoka', sans-serif;
+}
+
+
+
+/* Clases personalizadas para colores */
+.my-yellow {
+  color: #faa307;
+}
+
+.my-yellower {
+  color: #e08e00;
+}
+
+.my-bg-light-teal {
+  background-color: #005f73;
+}
+
+/* .my-bg-light-teal {
+  background-color: #faa307;
+} */
+
+.my-bg-yellower {
+  background-color: #e08e00;
+}
+
+.my-teal {
+  color: #005f73;
+}
+
+.my-bg-teal {
+  background-color: #004756;
+}
+
+.my-bg-sky {
+  background-color: #0a958e;
+}
+
+.my-bg-blue {
+  background-color: #0b203f;
+}
+
+.my-gray {
+  color: #f0f0f0;
+}
+
+.event {
+  background-color: #3B82F6; /* Tailwind's blue-400 */
+}
+
+/* header */
+.shared-header {
+  background-color: #005f73;
+  padding: 1rem 0.5rem;
+  height: 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0px;
+  z-index: 50;
+  width: 100%;
+}
+
+/* sidebar */
+.shared-sidebar {
+  width: 16rem;
+  background-color: #005f73;
+  padding: 2rem 0.5rem;
+  margin-top: 4.5rem;
+  color:#f6f6f6;
+}
+
+.shared-sidebar li :hover {
+  background-color: #0b203f;
+}
+
+
+/* main */
+main {
+  color: #003845;
+  background-color: #f6f6f6;
+  min-width: calc(100vw - 16rem);
+  min-height: calc(100vh - 4.5rem);
+  flex: 1;
+  padding: 2rem;
+  margin-top: 4.5rem;
+}
+
+/* Generales */
+.card {
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+/* .button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  /* background-color: #faa307;
+  color: white; 
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 1rem;
+  transition: background-color 0.3s;
+} */
+
+.link {
+  display: block;
+  color: #f0f0f0;
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  font-family: 'Nunito', sans-serif;
+}
+
+.button:hover {
+  background-color: #00748b;
+}

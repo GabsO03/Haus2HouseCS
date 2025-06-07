@@ -1,0 +1,112 @@
+<ng-template #cargando>
+  <shared-loading></shared-loading>
+</ng-template>
+
+<h2 class="mb-3 block font-bold text-2xl text-[#07074D]">
+    Editar mi perfil
+</h2>
+
+<div *ngIf="!isLoading && worker; else cargando" class="flex flex-col items-center justify-center p-12">
+
+    <div class="mx-auto w-full max-w-[1100px] bg-white card flex flex-col items-center lg:flex-row gap-6 p-6">
+        <form [formGroup]="workerForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data"
+        class="w-full lg:w-1/2" >
+            <div class="mb-5">
+                <label for="nombre" class="mb-3 block text-base font-medium text-[#07074D]">Nombre Completo</label>
+                <input type="text" id="nombre" formControlName="nombre" placeholder="Nombre Completo" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                <span *ngIf="isValidField('nombre')" class="text-red-600 text-sm">{{ getFieldError('nombre') }}</span>
+            </div>
+
+            <div class="mb-5">
+                <label for="email" class="mb-3 block text-base font-medium text-[#07074D]">Correo Electrónico</label>
+                <input type="email" id="email" formControlName="email" placeholder="Ingresa tu correo" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                <span *ngIf="isValidField('email')" class="text-red-600 text-sm">{{ getFieldError('email') }}</span>
+            </div>
+
+            <div class="mb-5">
+                <label for="telefono" class="mb-3 block text-base font-medium text-[#07074D]">Teléfono</label>
+                <input type="text" id="telefono" formControlName="telefono" placeholder="Ingresa tu teléfono" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                <span *ngIf="isValidField('telefono')" class="text-red-600 text-sm">{{ getFieldError('telefono') }}</span>
+            </div>
+
+            <div class="mb-5">
+                <label for="dni" class="mb-3 block text-base font-medium text-[#07074D]">DNI</label>
+                <input type="text" id="dni" formControlName="dni" placeholder="11223344C" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                <span *ngIf="isValidField('dni')" class="text-red-600 text-sm">{{ getFieldError('dni') }}</span>
+            </div>
+
+            <div class="mb-5">
+                <label class="mb-3 block text-base font-medium text-[#07074D]">Servicios</label>
+                <div class="relative">
+                <div *ngIf="showServiceInput" class="absolute top-full left-0 w-full bg-white border border-[#e0e0e0] rounded-md z-10">
+                    <input type="text" #serviceInput id="serviceInput" [formControl]="newService" placeholder="Busca un servicio" class="w-full py-3 px-4 rounded text-base font-medium text-[#6B7280] outline-none" (blur)="onAddService()" />
+                    <div *ngIf="existingServices.length > 0 && serviceSearchActive" class="max-h-40 overflow-y-auto">
+                    <div *ngFor="let service of existingServices" (click)="onAddService(service)" class="px-4 py-2 hover:bg-gray-100 cursor-pointer">{{ service.name }}</div>
+                    </div>
+                </div>
+                <button type="button" (click)="toggleServiceInput()" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] text-left outline-none focus:border-[#6A64F1] focus:shadow-md">Busca un servicio</button>
+                </div>
+                <div class="flex flex-wrap gap-2 mt-2">
+                <div *ngFor="let service of services.controls; let i = index" class="flex items-center bg-gray-100 text-gray-800 font-medium px-3 py-1 rounded-lg text-sm">
+                    <span>{{ getServiceName(service.value) }}</span>
+                    <button type="button" (click)="onRemoveService(i)" class="ml-2">✕</button>
+                </div>
+                </div>
+                <span *ngIf="isValidField('services_id')" class="text-red-600 text-sm">Debes seleccionar al menos un servicio</span>
+            </div>
+
+            <div class="mb-5">
+                <label for="bio" class="mb-3 block text-base font-medium text-[#07074D]">Biografía</label>
+                <textarea id="bio" formControlName="bio" placeholder="Describe tu experiencia" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"></textarea>
+                <span *ngIf="isValidField('bio')" class="text-red-600 text-sm">{{ getFieldError('bio') }}</span>
+            </div>
+
+            <div class="mb-5">
+                <label for="direccion" class="mb-3 block text-base font-medium text-[#07074D]">Dirección</label>
+                <div class="flex items-center space-x-2">
+                    <input type="text" id="direccion" formControlName="direccion" placeholder="Ingresa tu dirección" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                    <button type="button" (click)="openChooseLocationModal()" class="button my-bg-teal text-white rounded-md py-3 px-6 text-base font-semibold outline-none">Ver Mapa</button>
+                </div>
+                <span *ngIf="isValidField('direccion')" class="text-red-600 text-sm">{{ getFieldError('direccion') }}</span>
+            </div>
+
+            <input type="hidden" formControlName="lat" />
+            <input type="hidden" formControlName="lng" />
+
+            <div class="mb-5">
+                <label class="flex items-center">
+                <input type="checkbox" formControlName="active" class="mr-2" />
+                <span class="text-base font-medium text-[#07074D]">Disponible para trabajar</span>
+                </label>
+            </div>
+
+            <div>
+                <button type="submit" class="button my-bg-light-teal hover:shadow-form w-full rounded-md py-3 px-8 text-center text-base font-semibold text-white outline-none">Actualizar Trabajador</button>
+            </div>
+        </form>
+
+        <!-- Muestra la imagen existente o la recién cargada -->
+        <div class="w-1/2 lg:w-1/3 flex justify-center items-center rounded-3xl">
+            <img [src]="worker.user.profile_photo | user_pfp" alt="Foto de perfil"
+                class="object-cover rounded-lg" />
+        </div>
+
+    </div>
+
+        
+    <div class="mb-5 flex items-center justify-between lg:justify-start w-full max-w-[550px] bg-white card">
+        <label class="block text-lg font-medium text-[#07074D]">Cambiar Contraseña</label>
+        <button type="button" (click)="openChangePasswordModal()" class="button my-bg-teal text-white w-1/2 rounded-md py-3 px-6 text-base font-semibold outline-none">Cambiar Contraseña</button>
+    </div>
+
+</div>
+
+
+<change-password-modal *ngIf="worker?.user?.id" [userId]="worker!.user!.id"></change-password-modal>
+<shared-choose-location
+  *ngIf="worker?.user?.id"
+  [initialAddress]="workerForm.get('direccion')?.value"
+  [initialLat]="workerForm.get('lat')?.value"
+  [initialLng]="workerForm.get('lng')?.value"
+  (locationSelected)="handleLocationSelected($event)">
+</shared-choose-location>

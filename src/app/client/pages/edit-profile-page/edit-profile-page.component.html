@@ -1,0 +1,72 @@
+<ng-template #cargando>
+  <shared-loading></shared-loading>
+</ng-template>
+
+<h2 class="mb-3 block font-bold text-2xl text-[#07074D]">
+    Editar mi perfil
+</h2>
+
+<div *ngIf="!isLoading && client; else cargando" class="flex flex-col items-center justify-center p-12">
+    <div class="mx-auto w-full max-w-[1100px] bg-white card flex flex-col items-center lg:flex-row gap-6 p-6">
+        <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data" class="w-full lg:w-1/2">
+            <div class="mb-5">
+                <label for="nombre" class="mb-3 block text-base font-medium text-[#07074D]">Nombre Completo</label>
+                <input type="text" id="nombre" formControlName="nombre" placeholder="Nombre Completo" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                <span *ngIf="isValidField('nombre')" class="text-red-600 text-sm">{{ getFieldError('nombre') }}</span>
+            </div>
+
+            <div class="mb-5">
+                <label for="email" class="mb-3 block text-base font-medium text-[#07074D]">Correo Electrónico</label>
+                <input type="email" id="email" formControlName="email" placeholder="Ingresa tu correo" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                <span *ngIf="isValidField('email')" class="text-red-600 text-sm">{{ getFieldError('email') }}</span>
+            </div>
+
+            <div class="mb-5">
+                <label for="telefono" class="mb-3 block text-base font-medium text-[#07074D]">Teléfono</label>
+                <input type="text" id="telefono" formControlName="telefono" placeholder="Ingresa tu teléfono" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                <span *ngIf="isValidField('telefono')" class="text-red-600 text-sm">{{ getFieldError('telefono') }}</span>
+            </div>
+
+            <div class="mb-5">
+                <label for="direccion" class="mb-3 block text-base font-medium text-[#07074D]">Dirección</label>
+                <div class="flex items-center space-x-2">
+                    <input type="text" id="direccion" formControlName="direccion" placeholder="Ingresa tu dirección" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                    <button type="button" (click)="openChooseLocationModal()" class="button my-bg-teal text-white rounded-md py-3 px-6 text-base font-semibold outline-none">Ver Mapa</button>
+                </div>
+                <span *ngIf="isValidField('direccion')" class="text-red-600 text-sm">{{ getFieldError('direccion') }}</span>
+            </div>
+
+            <input type="hidden" formControlName="lat" />
+            <input type="hidden" formControlName="lng" />
+
+
+            <div class="mb-5">
+                <label for="profile_photo" class="mb-3 block text-base font-medium text-[#07074D]">Foto de Perfil</label>
+                <input type="file" id="profile_photo" accept="image/*" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" (change)="onFileSelected($event)" />
+            </div>
+
+            
+            <div>
+                <button type="submit" class="button my-bg-light-teal hover:shadow-form w-full rounded-md py-3 px-8 text-center text-base font-semibold text-white outline-none">Actualizar Perfil</button>
+            </div>
+        </form>
+
+        <div class="w-1/2 lg:w-1/3 flex justify-center items-center rounded-3xl">
+            <img [src]="client.user.profile_photo | user_pfp" alt="Foto de perfil" class="object-cover rounded-lg" />
+        </div>
+    </div>
+
+    <div class="mb-5 flex items-center justify-between lg:justify-start w-full max-w-[550px] bg-white card">
+        <label class="block text-lg font-medium text-[#07074D]">Cambiar Contraseña</label>
+        <button type="button" (click)="openChangePasswordModal()" class="button my-bg-teal text-white w-1/2 rounded-md py-3 px-6 text-base font-semibold outline-none">Cambiar Contraseña</button>
+    </div>
+</div>
+
+<change-password-modal *ngIf="client?.user?.id" [userId]="client!.user!.id"></change-password-modal>
+<shared-choose-location
+  *ngIf="client?.user?.id"
+  [initialAddress]="clientForm.get('direccion')?.value"
+  [initialLat]="clientForm.get('lat')?.value"
+  [initialLng]="clientForm.get('lng')?.value"
+  (locationSelected)="handleLocationSelected($event)">
+</shared-choose-location>

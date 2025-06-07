@@ -1,0 +1,43 @@
+<ng-template #cargando>
+  <shared-loading></shared-loading>
+</ng-template>
+
+<div *ngIf="!isLoading; else cargando" class="min-h-screen bg-gray-50">
+  <div class="container mx-auto px-4 py-8 -mt-12">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-quicksand font-bold text-teal-700">
+        Mi Horario Semanal
+      </h1>
+      <button *ngIf="selfProfile" 
+              class="button px-4 py-2 my-bg-teal text-white rounded-lg hover:bg-teal-700 transition-colors flex items-center gap-2"
+              [routerLink]="['/helper/schedule/edit']">
+        Editar <i class="fa-solid fa-pencil"></i>
+      </button>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr>
+            <th class="bg-gray-100 p-3 font-semibold text-gray-700 border-b border-r">Hora</th>
+            <th *ngFor="let day of daysOfWeek" 
+                class="bg-gray-100 p-3 font-semibold text-gray-700 text-center border-b">
+              {{ day.name }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let hour of day_hours">
+            <td class="bg-gray-100 p-3 text-gray-600 border-r border-b font-medium">
+              {{ hour }}:00
+            </td>
+            <td *ngFor="let day of daysOfWeek"
+                class="p-3 border-b text-center"
+                [ngClass]="isHourAvailable(day.index, hour) ? day.color : 'bg-gray-200'">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="mx-auto w-full max-w-[550px] bg-white card">
+  <h2 class="text-2xl font-bold text-center text-teal-700 font-quicksand mb-6">Añadir Método de Pago</h2>
+  
+  <!-- Mantener #card-element siempre en el DOM -->
+  <div class="mb-5">
+    <label for="card-element" class="mb-3 block text-base font-medium text-[#07074D]">
+      Detalles de la Tarjeta
+    </label>
+    <div #cardElement id="card-element" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" [style.display]="loading ? 'none' : 'block'"></div>
+    <span *ngIf="cardError" class="text-red-600 text-sm">{{ cardError }}</span>
+  </div>
+
+  <form *ngIf="!loading; else cargando" [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+    <div>
+      <button
+        type="submit"
+        [disabled]="paymentForm.invalid || loading"
+        class="button my-bg-light-teal hover:shadow-form w-full rounded-md py-3 px-8 text-center text-base font-semibold text-white outline-none"
+      >
+        Añadir Método de Pago
+      </button>
+    </div>
+  </form>
+
+  <ng-template #cargando>
+    <shared-loading></shared-loading>
+  </ng-template>
+</div>

@@ -1,0 +1,204 @@
+<ng-template #cargando>
+  <shared-loading></shared-loading>
+</ng-template>
+
+<div *ngIf="!isLoading && service; else cargando" class="bg-gray-100 min-h-screen flex items-center justify-center px-4">
+  <div class="max-w-4xl bg-white w-full rounded-lg shadow-xl">
+    <div class="p-4 border-b">
+      <h2 class="text-2xl font-quicksand text-teal-700">
+        Detalles del Servicio
+      </h2>
+      <p class="text-sm text-gray-500">
+        Información del servicio {{ service.status | estado | lowercase }}.
+      </p>
+    </div>
+    <div>
+      <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+        <p class="text-gray-600">
+          Cliente
+        </p>
+        <p>
+          <a href="customer/{{service.client!.user!.id}}">{{ service.client!.user!.nombre || 'Desconocido' }}</a>
+        </p>
+      </div>
+      <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+        <p class="text-gray-600">
+          Trabajador
+        </p>
+        <p>
+          <a href="helper/{{service.worker!.user!.id}}">{{ service.worker!.user!.nombre || 'Desconocido' }}</a>
+        </p>
+      </div>
+      <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+        <p class="text-gray-600">
+          Tipo de Servicio
+        </p>
+        <p>
+          {{ service.service_type!.name || 'Desconocido' }}
+        </p>
+      </div>
+      <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+        <p class="text-gray-600">
+          Fecha
+        </p>
+        <p>
+          {{ service.start_time | dateFormatService:'toDate' }}
+        </p>
+      </div>
+      <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+        <p class="text-gray-600">
+          Horas
+        </p>
+        <p>
+          {{ service.start_time | dateFormatService:'toTime' }} - 
+          {{ service.end_time | dateFormatService:'toTime' }}
+          <span>({{ calculateHours(service.start_time, service.end_time) }} horas)</span>
+        </p>
+      </div>
+      <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+        <p class="text-gray-600">
+          Estado
+        </p>
+        <p>
+          {{ service.status | estado }}
+        </p>
+      </div>
+      <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+        <p class="text-gray-600">
+          Monto Total
+        </p>
+        <p>
+          $ {{ service.total_amount }}
+        </p>
+      </div>
+      <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+        <p class="text-gray-600">
+          Ubicación del Cliente
+        </p>
+        <p>
+          {{ service.client_location || 'No especificada' }}
+        </p>
+      </div>
+      <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+        <p class="text-gray-600">
+          Descripción
+        </p>
+        <p>
+          {{ service.description || 'Sin descripción' }}
+        </p>
+      </div>
+      <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4">
+        <p class="text-gray-600">
+          Especificaciones
+        </p>
+        <p>
+          {{ service.specifications || 'Sin especificaciones' }}
+        </p>
+      </div>
+    </div>
+    <div class="p-4 flex gap-2">
+      <!-- Botón "Volver" siempre visible -->
+      <button class="button my-bg-light-teal text-white" (click)="goBack()">
+        Volver
+      </button>
+
+      <!-- Botones para el Trabajador -->
+      <ng-container *ngIf="userRole === 'worker'">
+        <ng-container [ngSwitch]="service.status">
+          <!-- Estado: assigned -->
+          <ng-container *ngSwitchCase="'assigned'">
+            <button class="button my-bg-teal text-white" (click)="acceptService()">
+              Aceptar
+            </button>
+            <button class="button my-bg-teal text-white" (click)="rejectService()">
+              Rechazar
+            </button>
+          </ng-container>
+
+          <!-- Estado: accepted -->
+          <ng-container *ngSwitchCase="'accepted'">
+            <button *ngIf="canStartService()"
+            class="button my-bg-teal text-white"
+            (click)="startService()">
+              Empezar
+            </button>
+            <button class="button my-bg-teal text-white" (click)="cancelService()">
+              Cancelar
+            </button>
+          </ng-container>
+
+          <!-- Estado: in_progress -->
+          <ng-container *ngSwitchCase="'in_progress'">
+            <button *ngIf="service.payment_method === 'cash' && service.payment_status === 'emitido' && canCompleteServiceOrConfirmPayment()"
+              class="button my-bg-teal text-white" (click)="confirmCashPayment()">
+              Confirmar Pago
+            </button>
+            <button *ngIf="service.payment_status === 'pagado' && canCompleteServiceOrConfirmPayment()"
+              class="button my-bg-teal text-white" (click)="completeService()">
+              Completar Servicio
+            </button>
+            <button *ngIf="service.payment_status === 'pendiente'"
+              class="button my-bg-teal text-white" (click)="cancelService()">
+              Cancelar
+            </button>
+          </ng-container>
+
+          
+
+          <!-- Estado: completed o cancelled -->
+          <ng-container *ngSwitchCase="'completed'">
+            <button class="button my-bg-teal text-white" (click)="openRatingModal()">
+              Valorar Servicio
+            </button>
+          </ng-container>
+          <ng-container *ngSwitchCase="'cancelled'">
+            <button class="button my-bg-teal text-white" (click)="openRatingModal()">
+              Valorar Servicio
+            </button>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <!-- Botones para el Cliente -->
+      <ng-container *ngIf="userRole === 'client'">
+        <ng-container [ngSwitch]="service.status">
+          <!-- Estado: accepted -->
+          <ng-container *ngSwitchCase="'accepted'">
+            <button class="button my-bg-teal text-white" (click)="cancelService()">
+              Cancelar
+            </button>
+          </ng-container>
+
+          <!-- Estado: in_progress -->
+          <ng-container *ngSwitchCase="'in_progress'">
+            <button class="button my-bg-teal text-white" (click)="cancelService()">
+              Cancelar
+            </button>
+            <button *ngIf="service.payment_method === 'cash' && service.payment_status === 'pendiente' && canCompleteServiceOrConfirmPayment()"
+              class="button my-bg-teal text-white" (click)="confirmCashPayment()">
+              Emitir Pago
+            </button>
+          </ng-container>
+
+          <!-- Estado: completed o cancelled -->
+          <ng-container *ngSwitchCase="'completed'">
+            <button class="button my-bg-teal text-white" (click)="openRatingModal()">
+              Valorar Servicio
+            </button>
+          </ng-container>
+          <ng-container *ngSwitchCase="'cancelled'">
+            <button class="button my-bg-teal text-white" (click)="openRatingModal()">
+              Valorar Servicio
+            </button>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+
+<servicio-valorar-servicio-modal
+  *ngIf="service?.id"
+  [servicioId]="service!.id"
+></servicio-valorar-servicio-modal>
