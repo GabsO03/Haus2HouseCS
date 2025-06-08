@@ -60,7 +60,7 @@
             Aún no tienes trabajadores
           </th>
         </tr>
-        <tr *ngFor="let worker of filteredWorkers; let i = index"
+        <tr [id]="worker.user.id" *ngFor="let worker of filteredWorkers; let i = index"
           class="bg-white border-b border-[#e0e0e0] hover:bg-gray-50">
           <th scope="row" class="flex items-center px-6 py-4 text-[#07074D] whitespace-nowrap">
             <img class="w-10 h-10 rounded-full" [src]="worker.user.profile_photo | user_pfp" [alt]="worker.user.nombre">
@@ -91,7 +91,7 @@
           <td class="px-6 py-4">
             <div class="flex justify-between">
             <a href="helper/{{ worker.user_id }}" class="font-medium text-[#6A64F1] hover:underline" ><i class="fa-solid fa-eye"></i></a>
-            <button (click)="toggleWorkerActivo(worker.user_id, worker.active == 1)" class="hover:cursor-pointer font-medium text-[#6A64F1] hover:underline" ><i class="fa-solid fa-exclamation" style="color: #ff0000;"></i></button>
+            <button (click)="deleteWorker(worker.user_id)" class="hover:cursor-pointer font-medium text-[#6A64F1] hover:underline" ><i class="fa-solid fa-trash" style="color: #ff0000;"></i></button>
             </div>
           </td>
         </tr>

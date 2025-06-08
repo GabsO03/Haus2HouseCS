@@ -21,9 +21,9 @@ export class AuthService {
     private httpClient: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    if (isPlatformBrowser(this.platformId)) {
-      this.checkAuthenticacion().subscribe();
-    }
+    // if (isPlatformBrowser(this.platformId)) {
+    //   this.checkAuthenticacion().subscribe();
+    // }
   }
 
   signIn( user: User ): Observable<User> {

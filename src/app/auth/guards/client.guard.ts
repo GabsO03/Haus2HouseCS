@@ -16,7 +16,6 @@ export class ClientGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean> {
     return this.authService.checkAuthenticacion().pipe(
-      delay(500),
       tap(isAuthenticated => console.log('ClientGuard: isAuthenticated =', isAuthenticated)),
       map(isAuthenticated => {
         if (!isAuthenticated) {

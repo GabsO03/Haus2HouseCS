@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, GuardResult, MaybeAsync, Route, Router, RouterStateSnapshot, UrlSegment } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, GuardResult, MaybeAsync, Route, Router, RouterStateSnapshot, UrlSegment } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Observable, tap } from 'rxjs';
 
@@ -15,7 +15,7 @@ export class AuthGuard {
         return this.authService.checkAuthenticacion()
         .pipe(
           tap( isAuthenticated => {
-            if ( ! isAuthenticated ){
+            if (!isAuthenticated ){
               this.router.navigate(['./auth/login'])
             }})
         )  

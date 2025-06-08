@@ -147,6 +147,54 @@ export class ListPageComponent implements OnInit {
     });
   }
 
+  deleteWorker(worker_id: string): void {
+    Swal.fire({
+      title: `¿Eliminar trabajador?`,
+      text: `¿Estás seguro de que quieres eliminar a este trabajador?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#6A64F1',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, ¡hazlo!',
+      cancelButtonText: 'No, cancelar',
+      buttonsStyling: true,
+      customClass: {
+        confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md',
+        cancelButton: 'swal2-cancel btn bg-red-500 text-white font-semibold py-2 px-4 rounded-md'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.workerService.deleteWorker(worker_id).subscribe({
+          next: (response) => {
+            Swal.fire({
+              title: '¡Hecho!',
+              text: `Trabajador eliminado correctamente`,
+              icon: 'success',
+              confirmButtonColor: '#6A64F1',
+              customClass: {
+                confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md'
+              }
+            });
+            setTimeout(() => {
+              document.getElementById(worker_id)?.remove();
+            }, 1000);
+          },
+          error: (err) => {
+            Swal.fire({
+              title: '¡Error!',
+              text: err.error.message || 'Error al eliminar al trabajador',
+              icon: 'error',
+              confirmButtonColor: '#6A64F1',
+              customClass: {
+                confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md'
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+  
   toggleWorkerActivo(worker_id: string, activo: boolean): void {
     Swal.fire({
       title: `¿${activo ? 'Desactivar' : 'Activar'} trabajador?`,

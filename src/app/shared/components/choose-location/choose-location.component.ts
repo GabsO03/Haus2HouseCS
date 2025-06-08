@@ -177,7 +177,7 @@ export class ChooseLocationComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error en la búsqueda:', error);
-        this.alertService.error('Error al buscar la dirección: ' + error);
+        this.alertService.error('Error al buscar la dirección');
       }
     });
   }
@@ -193,7 +193,7 @@ export class ChooseLocationComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error en geocodificación inversa:', error);
-        this.alertService.error('Error al obtener la dirección: ' + error);
+        this.alertService.error('Error al obtener la dirección');
       }
     });
   }
