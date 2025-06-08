@@ -43,10 +43,10 @@ export class LoginPageComponent {
       else {
         const ruta = user.rol == 'admin' ? '/helper' : '/services';
         this.router.navigate([ruta]);
+        this.userForm.reset();
       }
     })
 
-    this.userForm.reset();
 
   }
 

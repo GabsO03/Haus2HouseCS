@@ -5,7 +5,6 @@ import { ClientRoutingModule } from './client-routing.module';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { LayoutPageComponent } from './pages/layout-page/layout-page.component';
 import { RouterModule } from '@angular/router';
-import { ListPageComponent } from './pages/list-page/list-page.component';
 import { SharedModule } from '../shared/shared.module';
 import { PaymentMethodComponent } from './pages/payment-method/payment-method.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -18,7 +17,6 @@ import { UserPfpPipe } from './pipes/user-pfp.pipe';
   declarations: [
     ProfilePageComponent,
     LayoutPageComponent,
-    ListPageComponent,
     PaymentMethodComponent,
     AddPaymentMethodComponent,
     EditProfilePageComponent,
