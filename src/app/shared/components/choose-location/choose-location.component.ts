@@ -43,8 +43,13 @@ export class ChooseLocationComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     if (this.isBrowser) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
       const leaflet = await import('leaflet');
       (window as any).L = leaflet;
+      
       this.locationForm.patchValue({ address: this.initialAddress });
       this.searchSubscription = this.searchSubject
         .pipe(debounceTime(500), distinctUntilChanged())
@@ -64,7 +69,6 @@ export class ChooseLocationComponent implements OnInit, OnDestroy {
       this.map.remove();
       this.map = null;
       this.marker = null;
-      delete (window as any).L;
     }
     if (this.searchSubscription) {
       this.searchSubscription.unsubscribe();
@@ -73,18 +77,18 @@ export class ChooseLocationComponent implements OnInit, OnDestroy {
   }
 
   initMap(): void {
-    if (!this.isBrowser || !window.L || !this.mapContainerRef) return;
+    if (!this.isBrowser || !L || !this.mapContainerRef) return;
 
-    this.map = window.L.map(this.mapContainerRef.nativeElement).setView(
+    this.map = L.map(this.mapContainerRef.nativeElement).setView(
       [this.defaultLocation.lat, this.defaultLocation.lng],
       12
     );
 
-    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(this.map);
 
-    this.marker = window.L.marker(
+    this.marker = L.marker(
       [this.defaultLocation.lat, this.defaultLocation.lng],
       { draggable: true }
     ).addTo(this.map);
@@ -100,7 +104,7 @@ export class ChooseLocationComponent implements OnInit, OnDestroy {
       this.reverseGeocode(lat, lng);
     });
 
-    setTimeout(() => this.map.invalidateSize(), 100);
+    setTimeout(() => this.map!.invalidateSize(), 100);
   }
 
   getUserLocation(): void {
