@@ -117,9 +117,9 @@ export class ServiceDetailPageComponent implements OnInit {
 
   acceptService(): void {
     this.changeServiceStatus('accepted');
-    // setTimeout(() => {
-    //   location.reload();
-    // }, 4000);
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
   }
 
   rejectService(): void {

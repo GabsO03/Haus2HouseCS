@@ -77,7 +77,7 @@ export class AddPaymentMethodComponent implements OnInit, AfterViewInit, OnDestr
             card: this.card,
           });
         }
-      }, 1000); // Aumentado a 1000ms para mayor seguridad
+      }, 1000);
     } catch (err) {
       console.error('Error en ngAfterViewInit:', err);
       this.cardError = 'Error al inicializar Stripe';
