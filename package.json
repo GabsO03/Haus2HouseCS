@@ -5,7 +5,6 @@
     "ng": "ng",
     "start": "node -r dotenv/config ./node_modules/@angular/cli/bin/ng serve",
     "build": "node replace-env.js && ng build",
-    "build:ssr": "ng build --configuration production && ng run haus2house:server:production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:haus2house": "node dist/haus2house/server/server.mjs"
