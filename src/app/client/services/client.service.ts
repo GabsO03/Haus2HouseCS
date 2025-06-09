@@ -24,7 +24,6 @@ export class ClientService {
   getClienteById(id: string): Observable<ClientResponse>{
     return this.httpClient.get<any>(`${ this.baseURL }/clients/${ id }`)
     .pipe(
-      delay(800),
       catchError(error => of(undefined)),
       map(respuesta => respuesta.data) 
     );

@@ -135,7 +135,7 @@ export class AddPaymentMethodComponent implements OnInit, AfterViewInit, OnDestr
           },
           error: (err) => {
             console.error('Error del backend:', err);
-            this.cardError = err.error?.message || 'Error al añadir el método de pago';
+            this.cardError = 'Error al añadir el método de pago, revisa que los datos de tu tarjeta sean correctos';
             this.loading = false;
           },
         });

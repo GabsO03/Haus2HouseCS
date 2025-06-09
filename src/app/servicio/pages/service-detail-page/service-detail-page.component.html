@@ -25,7 +25,10 @@
         <p class="text-gray-600">
           Trabajador
         </p>
-        <p>
+        <p *ngIf="service.worker!.user!.nombre == 'none'">
+          Desconocido
+        </p>
+        <p *ngIf="service.worker!.user!.nombre != 'none'">
           <a href="helper/{{service.worker!.user!.id}}">{{ service.worker!.user!.nombre || 'Desconocido' }}</a>
         </p>
       </div>
@@ -162,6 +165,12 @@
       <!-- Botones para el Cliente -->
       <ng-container *ngIf="userRole === 'client'">
         <ng-container [ngSwitch]="service.status">
+          <!-- Estado: assigned -->
+          <ng-container *ngSwitchCase="'assigned'">
+            <button class="button my-bg-teal text-white" (click)="cancelService()">
+              Cancelar
+            </button>
+          </ng-container>
           <!-- Estado: accepted -->
           <ng-container *ngSwitchCase="'accepted'">
             <button class="button my-bg-teal text-white" (click)="cancelService()">
@@ -171,7 +180,7 @@
 
           <!-- Estado: in_progress -->
           <ng-container *ngSwitchCase="'in_progress'">
-            <button class="button my-bg-teal text-white" (click)="cancelService()">
+            <button *ngIf="service.payment_status === 'pendiente'" class="button my-bg-teal text-white" (click)="cancelService()">
               Cancelar
             </button>
             <button *ngIf="service.payment_method === 'cash' && service.payment_status === 'pendiente' && canCompleteServiceOrConfirmPayment()"
@@ -187,7 +196,7 @@
             </button>
           </ng-container>
           <ng-container *ngSwitchCase="'cancelled'">
-            <button class="button my-bg-teal text-white" (click)="openRatingModal()">
+            <button *ngIf="service.worker!.user!.nombre != 'none'" class="button my-bg-teal text-white" (click)="openRatingModal()">
               Valorar Servicio
             </button>
           </ng-container>

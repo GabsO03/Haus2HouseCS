@@ -14,10 +14,9 @@ export class AuthGuard {
     private checkAuthStatus(): boolean | Observable<boolean>{
         return this.authService.checkAuthenticacion()
         .pipe(
-            delay(1000),
             tap( isAuthenticated => {
                 if (!isAuthenticated ){
-                this.router.navigate(['./auth/login'])
+                    this.router.navigate(['./auth/login'])
                 }
             })
         )  

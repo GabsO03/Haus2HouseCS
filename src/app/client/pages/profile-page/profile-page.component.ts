@@ -27,7 +27,6 @@ export class ProfilePageComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.params
       .pipe(
-        delay(800),
         switchMap(({ id }) => {
           const token = localStorage.getItem('token');
           let idBuscar = id;

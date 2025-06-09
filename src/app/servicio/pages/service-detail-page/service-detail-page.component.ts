@@ -31,7 +31,6 @@ export class ServiceDetailPageComponent implements OnInit {
     this.userRole = this.authService.decrypt(localStorage.getItem('r')!);
     this.activatedRoute.params
       .pipe(
-        delay(800), // TODO: Se quitará luego
         switchMap(({ id }) => {
           if (!id) {
             this.router.navigate(['/']);
@@ -43,8 +42,6 @@ export class ServiceDetailPageComponent implements OnInit {
       .subscribe((service) => {
         this.isLoading = false;
 
-        console.log(service);
-        
         if (!service) {
           this.router.navigate(['/']);
           return;
@@ -86,7 +83,7 @@ export class ServiceDetailPageComponent implements OnInit {
       )
       .subscribe((updatedService) => {
         if (updatedService) {
-          this.service = updatedService; // Actualiza el servicio sin recargar
+          this.service = updatedService;
         }
       });
   }
@@ -97,14 +94,14 @@ export class ServiceDetailPageComponent implements OnInit {
 
   changeServiceStatus(status: string): void {
     this.isLoading = true;
-    console.log('Camviando a ', status);
+    console.log('Cambiando a ', status);
 
     if (this.service) {
       this.servicioService.updateServiceStatus(this.service.id, status).subscribe({
         next: (updatedService) => {
           this.service = updatedService;
           this.alertService.success(`Servicio actualizado a ${status}`);
-
+          this.isLoading = false;
         },
         error: (err) => {
           console.error('Error al cambiar el estado del servicio:', err);
@@ -116,20 +113,70 @@ export class ServiceDetailPageComponent implements OnInit {
   }
 
   acceptService(): void {
-    this.changeServiceStatus('accepted');
-    setTimeout(() => {
-      location.reload();
-    }, 2000);
+    Swal.fire({
+      title: '¿Aceptar servicio?',
+      text: '¿Estás seguro de que quieres aceptar este servicio?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#6A64F1',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, aceptar!',
+      cancelButtonText: 'No, mantener',
+      buttonsStyling: true,
+      customClass: {
+        confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md',
+        cancelButton: 'swal2-cancel btn bg-red-500 text-white font-semibold py-2 px-4 rounded-md'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.changeServiceStatus('accepted');
+        Swal.fire({
+          title: '¡Aceptado!',
+          text: 'El servicio ha sido aceptado correctamente',
+          icon: 'success',
+          confirmButtonColor: '#6A64F1',
+          customClass: {
+            confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md'
+          }
+        });
+      }
+    });
   }
 
   rejectService(): void {
-    this.changeServiceStatus('cancelled');
-    setTimeout(() => {
-      location.reload();
-    }, 2000);
+    Swal.fire({
+      title: '¿Rechazar servicio?',
+      text: '¿Estás seguro de que quieres rechazar este servicio?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#6A64F1',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, rechazar!',
+      cancelButtonText: 'No, mantener',
+      buttonsStyling: true,
+      customClass: {
+        confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md',
+        cancelButton: 'swal2-cancel btn bg-red-500 text-white font-semibold py-2 px-4 rounded-md'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.changeServiceStatus('rejected');
+        Swal.fire({
+          title: '¡Cancelado!',
+          text: 'El servicio ha sido rechazado correctamente',
+          icon: 'success',
+          confirmButtonColor: '#6A64F1',
+          customClass: {
+            confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md'
+          }
+        });
+        this.goBack();
+      }
+    });
   }
 
   cancelService(): void {
+    const estadoAnterior = this.service?.status;
     Swal.fire({
       title: '¿Cancelar servicio?',
       text: '¿Estás seguro de que quieres cancelar este servicio?',
@@ -147,7 +194,9 @@ export class ServiceDetailPageComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.changeServiceStatus('cancelled');
-        this.openRatingModal();
+        if (estadoAnterior == 'accepted') {
+          this.openRatingModal();
+        }
         Swal.fire({
           title: '¡Cancelado!',
           text: 'El servicio ha sido cancelado correctamente',
@@ -157,18 +206,12 @@ export class ServiceDetailPageComponent implements OnInit {
             confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md'
           }
         });
-        setTimeout(() => {
-          location.reload();
-        }, 1000);
       }
     });
   }
 
   startService(): void {
     this.changeServiceStatus('in_progress');
-    setTimeout(() => {
-      location.reload();
-    }, 1000);
   }
 
   completeService(): void {
@@ -179,11 +222,9 @@ export class ServiceDetailPageComponent implements OnInit {
   confirmCashPayment(): void {
     if (this.service) {
       this.servicioService.confirmCashPayment(this.service.id, this.userRole).subscribe({
-        next: () => {
+        next: (updatedService) => {
+          this.service = updatedService;
           this.alertService.success('Pago en efectivo confirmado');
-          setTimeout(() => {
-            location.reload();
-          }, 2000);
         },
         error: (err) => {
           this.alertService.error('Error al confirmar el pago');

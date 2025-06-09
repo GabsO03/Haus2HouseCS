@@ -69,7 +69,6 @@ export class EditProfilePageComponent implements OnInit {
     }
     this.clientService
       .getClienteById(userId)
-      .pipe(delay(800))
       .subscribe((response) => {
         this.isLoading = false;
         if (!response.client) {

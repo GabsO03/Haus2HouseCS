@@ -36,7 +36,6 @@ export class SchedulePageComponent implements OnInit {
 
     this.activatedRoute.params
       .pipe(
-        delay(800),
         switchMap(({ id }) => {
           // Determinamos si es el perfil propio (selfProfile)
           const token = localStorage.getItem('token');

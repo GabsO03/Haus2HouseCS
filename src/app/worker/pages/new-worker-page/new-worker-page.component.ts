@@ -321,7 +321,7 @@ export class NewWorkerPageComponent implements OnInit {
 
   rellenarServicesSelect() {
     this.servicioService.servicesTypes
-      .pipe(delay(800))
+      .pipe(delay(100))
       .subscribe(services => {
         this.existingServices = services;
       });
