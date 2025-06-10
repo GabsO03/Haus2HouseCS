@@ -148,11 +148,9 @@ export class EditProfilePageComponent implements OnInit {
     }
 
     this.clientService.updateCliente(clientData).subscribe({
-      next: (client) => {
-        this.alertService.success(`${client.user.nombre} actualizado!`);
-        setTimeout(() => {
-          location.reload();
-        }, 1500);
+      next: (updatedClient) => {
+        this.alertService.success(`${updatedClient.user.nombre} actualizado!`);
+        this.client = updatedClient;
         this.isLoading = false;
       },
       error: (err) => {

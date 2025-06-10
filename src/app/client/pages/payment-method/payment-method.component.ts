@@ -66,17 +66,22 @@ export class PaymentMethodComponent implements OnInit {
             next: (response) => {
               console.log('Método de pago eliminado:', response);
               Swal.fire({
-              title: '¡Cancelado!',
-              text: 'El servicio ha sido cancelado correctamente',
+              title: 'Eliminado!',
+              text: 'El método de pago ha sido eliminado correctamente',
               icon: 'success',
               confirmButtonColor: '#6A64F1',
               customClass: {
                 confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md'
               }
             });
-            setTimeout(() => {
-              location.reload();
-            }, 1000);
+            this.clientService.getPaymentMethods(token).subscribe(methods => {
+              this.paymentMethods = methods;
+              this.hasPaymentMethod = methods.length > 0;
+              this.loading = false;
+            }, error => {
+              console.error('Error al cargar métodos de pago:', error);
+              this.loading = false;
+            });
             },
             error: (err) => {
               console.error('Error al eliminar método de pago:', err);
