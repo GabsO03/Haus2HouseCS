@@ -5,7 +5,7 @@ import { Availability, Worker, WorkerResponse } from '../interfaces/worker.inter
 import { User } from '../../auth/interfaces/user.interface';
 import { WorkerTemplate } from '../interfaces/workertemplate.interface';
 import { Service } from '../../servicio/interfaces/service.interface';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'

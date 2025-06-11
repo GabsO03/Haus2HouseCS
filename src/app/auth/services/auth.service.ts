@@ -3,7 +3,7 @@ import { User } from '../interfaces/user.interface';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import * as CryptoJS from 'crypto-js';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.prod';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 import { Inject } from '@angular/core';

@@ -5,7 +5,7 @@ import { catchError, map, Observable, of, tap } from 'rxjs';
 import { Service } from '../interfaces/service.interface';
 import { ServiceTemplate } from '../interfaces/service-template'
 import { response } from 'express';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
