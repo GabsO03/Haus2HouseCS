@@ -89,7 +89,9 @@ export class ServiceDetailPageComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigateByUrl('/services/list');
+    const estadosParaHistorial = ['completed', 'cancelled'];
+    const ruta = estadosParaHistorial.includes(this.service!.status) ? 'history' : 'list';
+    this.router.navigateByUrl('/services/' + ruta);
   }
 
   changeServiceStatus(status: string): void {

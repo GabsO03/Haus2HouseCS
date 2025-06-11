@@ -15,9 +15,10 @@ export class AuthGuard {
         return this.authService.checkAuthenticacion()
         .pipe(
             tap( isAuthenticated => {
-                if (!isAuthenticated ){
-                    this.router.navigate(['./auth/login'])
+                if (isAuthenticated) {
+                    return true;
                 }
+                return this.router.createUrlTree(['auth/login']);
             })
         )  
     }
