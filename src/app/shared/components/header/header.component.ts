@@ -66,7 +66,7 @@ export class HeaderComponent { // implements OnDestroy {
       cancelButtonText: 'No, cancelar',
       buttonsStyling: true,
       customClass: {
-        confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md',
+        confirmButton: 'swal2-confirm btn my-bg-teal button-hover-teal text-white font-semibold py-2 px-4 rounded-md',
         cancelButton: 'swal2-cancel btn bg-red-500 text-white font-semibold py-2 px-4 rounded-md'
       }
     }).then((result) => {

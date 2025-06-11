@@ -31,12 +31,12 @@
 
                         <!-- Para el cliente -->
                         <div *ngIf="!selfProfile" class="mt-6 flex flex-wrap gap-4 justify-center">
-                            <a [routerLink]="['/helper/schedule/' + worker.user_id]" class="button my-bg-teal text-white">Ver horario</a>
+                            <a [routerLink]="['/helper/schedule/' + worker.user_id]" class="button my-bg-teal button-hover-teal text-white">Ver horario</a>
                         </div>
 
                         <!-- Para el trabajador -->
                         <div *ngIf="selfProfile" class="mt-4 flex flex-wrap gap-4 justify-center">
-                            <button class="button my-bg-teal text-white" [routerLink]="['/helper/profile/edit']">Editar Perfil</button>
+                            <button class="button my-bg-teal button-hover-teal text-white" [routerLink]="['/helper/profile/edit']">Editar Perfil</button>
                         </div>
                     </div>
                     <hr class="my-6 border-t border-gray-300">

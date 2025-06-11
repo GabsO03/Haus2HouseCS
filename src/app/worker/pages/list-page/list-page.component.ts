@@ -159,7 +159,7 @@ export class ListPageComponent implements OnInit {
       cancelButtonText: 'No, cancelar',
       buttonsStyling: true,
       customClass: {
-        confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md',
+        confirmButton: 'swal2-confirm btn my-bg-teal button-hover-teal text-white font-semibold py-2 px-4 rounded-md',
         cancelButton: 'swal2-cancel btn bg-red-500 text-white font-semibold py-2 px-4 rounded-md'
       }
     }).then((result) => {
@@ -172,7 +172,7 @@ export class ListPageComponent implements OnInit {
               icon: 'success',
               confirmButtonColor: '#6A64F1',
               customClass: {
-                confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md'
+                confirmButton: 'swal2-confirm btn my-bg-teal button-hover-teal text-white font-semibold py-2 px-4 rounded-md'
               }
             });
             setTimeout(() => {
@@ -186,7 +186,7 @@ export class ListPageComponent implements OnInit {
               icon: 'error',
               confirmButtonColor: '#6A64F1',
               customClass: {
-                confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md'
+                confirmButton: 'swal2-confirm btn my-bg-teal button-hover-teal text-white font-semibold py-2 px-4 rounded-md'
               }
             });
           }
@@ -207,7 +207,7 @@ export class ListPageComponent implements OnInit {
       cancelButtonText: 'No, cancelar',
       buttonsStyling: true,
       customClass: {
-        confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md',
+        confirmButton: 'swal2-confirm btn my-bg-teal button-hover-teal text-white font-semibold py-2 px-4 rounded-md',
         cancelButton: 'swal2-cancel btn bg-red-500 text-white font-semibold py-2 px-4 rounded-md'
       }
     }).then((result) => {
@@ -220,7 +220,7 @@ export class ListPageComponent implements OnInit {
               icon: 'success',
               confirmButtonColor: '#6A64F1',
               customClass: {
-                confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md'
+                confirmButton: 'swal2-confirm btn my-bg-teal button-hover-teal text-white font-semibold py-2 px-4 rounded-md'
               }
             });
             setTimeout(() => {
@@ -234,7 +234,7 @@ export class ListPageComponent implements OnInit {
               icon: 'error',
               confirmButtonColor: '#6A64F1',
               customClass: {
-                confirmButton: 'swal2-confirm btn my-bg-teal text-white font-semibold py-2 px-4 rounded-md'
+                confirmButton: 'swal2-confirm btn my-bg-teal button-hover-teal text-white font-semibold py-2 px-4 rounded-md'
               }
             });
             setTimeout(() => {

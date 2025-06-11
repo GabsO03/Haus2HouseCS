@@ -2,14 +2,10 @@
 /* Main title */
 .logo {
   margin: 0;
-  /* font-size: 2.5rem; */
-  /* color: white; */
   font-family: 'Open Sans Condensed', sans-serif;
   font-weight: bolder;
   text-transform: uppercase;
   letter-spacing: 5px;
-  /* background: linear-gradient(to right, #66005f, #16005f); */
-  /* -webkit-background-clip: text; */
   text-align: center;
   color: #FFFFFF;
   text-shadow: 
@@ -32,7 +28,6 @@ button, .button {
 }
 
 
-
 /* Clases personalizadas para colores */
 .my-yellow {
   color: #faa307;
@@ -46,9 +41,13 @@ button, .button {
   background-color: #005f73;
 }
 
-/* .my-bg-light-teal {
+.my-bg-gray {
+  background-color: #2B2B2B;
+}
+
+.my-bg-yellow {
   background-color: #faa307;
-} */
+}
 
 .my-bg-yellower {
   background-color: #e08e00;
@@ -70,7 +69,7 @@ button, .button {
   background-color: #0b203f;
 }
 
-.my-gray {
+.my-bg-gray {
   color: #f0f0f0;
 }
 
@@ -154,11 +153,14 @@ main {
   border: none;
   border-radius: 6px;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 500;
   transition: background-color 0.3s;
-  font-family: 'Nunito', sans-serif;
 }
 
-.button:hover {
+.button-hover-teal:hover {
   background-color: #00748b;
+}
+
+.button-hover-yellow:hover {
+  background-color: #faa307;
 }

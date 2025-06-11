@@ -31,7 +31,7 @@
                 <label for="direccion" class="mb-3 block text-base font-medium text-[#07074D]">Dirección</label>
                 <div class="flex items-center space-x-2">
                     <input type="text" id="direccion" formControlName="direccion" placeholder="Ingresa tu dirección" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-                    <button type="button" (click)="openChooseLocationModal()" class="button my-bg-teal text-white rounded-md py-3 px-6 text-base font-semibold outline-none">Ver Mapa</button>
+                    <button type="button" (click)="openChooseLocationModal()" class="button my-bg-teal button-hover-teal text-white rounded-md py-3 px-6 text-base font-semibold outline-none">Ver Mapa</button>
                 </div>
                 <span *ngIf="isValidField('direccion')" class="text-red-600 text-sm">{{ getFieldError('direccion') }}</span>
             </div>
@@ -58,7 +58,7 @@
 
     <div class="mb-5 flex items-center justify-between lg:justify-start w-full max-w-[550px] bg-white card">
         <label class="block text-lg font-medium text-[#07074D]">Cambiar Contraseña</label>
-        <button type="button" (click)="openChangePasswordModal()" class="button my-bg-teal text-white w-1/2 rounded-md py-3 px-6 text-base font-semibold outline-none">Cambiar Contraseña</button>
+        <button type="button" (click)="openChangePasswordModal()" class="button my-bg-teal button-hover-teal text-white w-1/2 rounded-md py-3 px-6 text-base font-semibold outline-none">Cambiar Contraseña</button>
     </div>
 </div>
 

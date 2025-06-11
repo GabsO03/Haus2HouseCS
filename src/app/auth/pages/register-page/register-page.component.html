@@ -57,8 +57,8 @@
       <div class="p-8 md:p-12 md:w-1/2 w-full flex items-center justify-center bg-gray-100">
         <div *ngIf="!isLoading; else cargando" class="w-full bg-white rounded-lg shadow-xl p-8">
           <div class="text-right mb-4">
-          <span class="text-gray-500">¿Ya tienes una cuenta?</span>
-            <a href="/auth/login" class="my-yellow dark:text-yellow-400 font-medium">Inicia sesión aquí</a>
+          <span class="text-gray-500">¿Ya tienes una cuenta? </span>
+            <a href="/auth/login" class="my-yellow dark:text-yellow-400 font-medium"> Inicia sesión aquí</a>
           </div>
       
           <div class="mb-8">
@@ -118,7 +118,7 @@
               <span class="text-red-500 text-sm" *ngIf="getErrorMessage('password_confirmation')">{{ getErrorMessage('password_confirmation') }}</span>
             </div>
           
-            <button type="submit" class="button w-full my-bg-teal text-white">
+            <button type="submit" class="button w-full my-bg-teal button-hover-teal text-white">
               Registrarse
             </button>
           </form>
