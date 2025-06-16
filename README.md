@@ -24,12 +24,14 @@ De la casa al hogar
 
 ## 📋 Tabla de Contenidos
 
-- [Visión General](#visión-general)
-- [Primeros Pasos](#primeros-pasos)
-  - [Requisitos Previos](#requisitos-previos)
-  - [Instalación](#instalación)
-- [Uso](#uso)
-- [Pruebas](#pruebas)
+- [Visión General](#-visión-general)
+- [¿Por qué Haus2House?](#-por-qué-haus2house)
+- [Características Técnicas Destacadas](#-características-técnicas-destacadas)
+- [Primeros Pasos](#-primeros-pasos)
+  - [Requisitos Previos](#-requisitos-previos)
+  - [Instalación](#-instalación)
+- [Uso](#-uso)
+- [Pruebas](#-pruebas)
 
 ---
 
