@@ -150,4 +150,4 @@ npm test
 
 ---
 
-🔙[Regresar](#tabla-de-contenidos)
+🔙[Regresar](#-tabla-de-contenidos)
