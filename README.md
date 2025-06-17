@@ -6,7 +6,7 @@ De la casa al hogar
 - TypeScript: 57.1%
 - Idiomas: 4
 
-** 👷Construido con las herramientas y tecnologías:**
+** 👷Construido con las herramientas y tecnologías: **
 
 ![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
 ![JSON](https://img.shields.io/badge/JSON-000000?style=for-the-badge&logo=json&logoColor=white)
