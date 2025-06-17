@@ -2,7 +2,7 @@
 
 De la casa al hogar
 
-- Último commit: el miércoles
+- Último commit: 18/06/25
 - TypeScript: 57.1%
 - Idiomas: 4
 
